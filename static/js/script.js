@@ -48,7 +48,7 @@ function renderPhases(phases, summaries) {
                 const chartTitle = chart.replace('.png', '').replace(/-/g, ' ').toUpperCase();
                 return `
                     <div class="chart-card">
-                        <img src="/static/images/phase${phase.id}/${chart}" 
+                        <img src="static/images/phase${phase.id}/${chart}" 
                              alt="${chartTitle}" 
                              class="chart-img" 
                              onclick="openLightbox(this.src, '${chartTitle}')"
