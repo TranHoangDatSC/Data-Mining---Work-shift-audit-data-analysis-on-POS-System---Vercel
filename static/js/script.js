@@ -34,7 +34,7 @@ async function loadDashboardData() {
         
     } catch (error) {
         console.error("Lỗi khởi tạo dữ liệu:", error);
-        showToast("Lỗi khi tải dữ liệu: " + error.message);
+        // showToast("Lỗi khi tải dữ liệu: " + error.message);
     }
 }
 
