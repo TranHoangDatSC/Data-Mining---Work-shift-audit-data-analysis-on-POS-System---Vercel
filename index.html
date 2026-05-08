@@ -428,25 +428,25 @@
           </div>
         </div>
         <div class="report-section">
-          <h3 class="section-title">4. Phân tích Thói quen theo Thời gian & Ca làm việc</h3>
-          <div class="insight-block reverse">
-            <div class="insight-text">
-              <p><strong>Mục đích:</strong> Truy tìm xem các ca rủi ro cao thường rơi vào thời điểm nào trong ngày.</p>
-              <ul class="insight-list">
-                <li><span class="highlight-text">Phát hiện bất ngờ:</span> Cụm C0 (Dư két cao) 100% xảy ra vào <strong>Ca Chiều</strong>. Lý do là Ca Sáng làm xong thường làm biếng mang tiền đi cất, để dồn lại trong két giao luôn cho Ca Chiều.</li>
-                <li>Ngược lại, Cụm C3 (Tải siêu cao - dễ hụt tiền) lại chiếm áp đảo ở <strong>Ca Sáng (>60%)</strong>. Chứng tỏ buổi sáng cửa hàng cực kỳ bận rộn, áp lực thanh toán lớn.</li>
-                <li>Biểu đồ tiến trình thời gian (Timeline) cho thấy sự phân bố của 4 cụm diễn ra liên tục theo các tháng, không có hiện tượng co cụm bất thường vào một mùa nào.</li>
-              </ul>
+            <h3 class="section-title">4. Phân tích Thói quen theo Thời gian & Ca làm việc</h3>
+            <div class="insight-block reverse">
+                <div class="insight-text">
+                <p><strong>Mục đích:</strong> Truy tìm xem các ca rủi ro cao thường rơi vào thời điểm nào trong ngày, và có mang tính "mùa vụ" hay không.</p>
+                <ul class="insight-list">
+                    <li><span class="highlight-text">Rủi ro Ca làm việc:</span> Cụm C0 (Dư két cao) 100% xảy ra vào <strong>Ca Chiều</strong> (do Ca Sáng lười chốt tiền). Ngược lại, Cụm C3 (Tải siêu cao - dễ hụt tiền) lại chiếm áp đảo ở <strong>Ca Sáng (>60%)</strong> do áp lực thanh toán lớn.</li>
+                    <li><span class="highlight-text">Phân bố Mùa vụ (Timeline):</span> Nhìn vào biểu đồ cột xếp chồng (bên dưới), tỷ lệ các cụm được phân bổ khá đồng đều và liên tục qua các tháng (không có tháng nào đột nhiên xuất hiện một loại lỗi lạ). Điều này chứng tỏ đây là <strong>sai lệch do thói quen vận hành cố hữu</strong>, chứ không phải do sự kiện đột xuất.</li>
+                    <li>Đặc biệt, Cụm C2 (Tích lũy dị biệt - Chấm xanh lục) thi thoảng mới xuất hiện ngẫu nhiên trên biểu đồ Scatter, đòi hỏi hệ thống giám sát phải luôn túc trực 24/7 để \"bắt tại trận\".</li>
+                </ul>
+                </div>
+                <div class="insight-img" style="display: flex; gap: 12px; flex-direction: column;">
+                <div class="chart-card">
+                    <img src="static/images/phase2/moring-afternoon-shift.png" alt="Tỷ lệ Ca Sáng và Ca Chiều" onclick="openLightbox(this.src, 'Histogram: Phân bố rủi ro theo Ca Sáng và Ca Chiều')">
+                </div>
+                <div class="chart-card">
+                    <img src="static/images/phase2/cluster-distribution-overtime.png" alt="Phân phối cụm theo thời gian" onclick="openLightbox(this.src, 'Biểu đồ kép: Phân tán Cash_Diff và Tỷ lệ Cụm rủi ro theo từng tháng')">
+                </div>
+                </div>
             </div>
-            <div class="insight-img" style="display: flex; gap: 12px; flex-direction: column;">
-              <div class="chart-card">
-                <img src="static/images/phase2/moring-afternoon-shift.png" alt="Tỷ lệ Ca Sáng và Ca Chiều" onclick="openLightbox(this.src, 'Phân bố rủi ro theo Ca Sáng và Ca Chiều')">
-              </div>
-              <div class="chart-card">
-                <img src="static/images/phase2/cluster-distribution-overtime.png" alt="Phân phối cụm theo thời gian" onclick="openLightbox(this.src, 'Tiến trình xuất hiện của 4 cụm theo trục thời gian')">
-              </div>
-            </div>
-          </div>
         </div>
         <div class="summary-box">
           <h3 class="summary-title">💡 KẾT LUẬN VÒNG 2 & ĐẦU RA SẢN PHẨM</h3>
