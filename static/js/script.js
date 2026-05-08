@@ -19,7 +19,7 @@ async function loadDashboardData() {
     try {
         // Fetch thông tin cấu trúc các phase
         const phasesRes = await fetch('/api/phases');
-        if (!phasesRes.ok) throw new Error("Không thể tải cấu trúc Phase");
+        // if (!phasesRes.ok) throw new Error("Không thể tải cấu trúc Phase");
         const phasesData = await phasesRes.json();
         
         // Fetch toàn bộ KPI của 4 phases cùng lúc
