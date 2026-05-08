@@ -952,3 +952,28 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+/* CSS bổ sung riêng cho bảng Report của Tab 5 */
+.report-table-wrapper { overflow-x: auto; margin-top: 24px; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.report-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+.report-table th { background: var(--bg-subtle); padding: 14px 16px; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border); white-space: nowrap; }
+.report-table td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.report-table tr:hover { background: #fafbfc; }
+.status-badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; white-space: nowrap; }
+.status-clear { background: #e8f9f7; color: #2ec4b6; }
+.status-medium { background: #fff0ea; color: #f4845f; }
+.status-notice { background: #eef0fd; color: #4361ee; }
+.highlight-rule { font-weight: 600; color: var(--text-primary); background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-med); font-size: 0.8rem; }
+
+/* -- Layout mới cho nội dung báo cáo -- */
+.report-clean { background: #e8f9f7; color: #1e9d90; padding: 12px 16px; border-radius: 8px; font-weight: 500; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(46, 196, 182, 0.2); }
+.report-details { display: flex; flex-direction: column; gap: 10px; min-width: 380px; }
+.report-box { background: var(--bg-subtle); border-radius: 8px; padding: 12px 16px; border: 1px solid var(--border); }
+.report-box.findings { border-left: 4px solid var(--accent); }
+.report-box.actions { border-left: 4px solid #f4845f; background: #fffaf8; }
+.report-box strong { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-primary); }
+.report-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.report-list li { position: relative; padding-left: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+.report-box.findings .report-list li::before { content: "•"; position: absolute; left: 6px; color: var(--accent); font-weight: bold; }
+.report-box.actions .report-list li::before { content: "→"; position: absolute; left: 4px; color: #f4845f; font-weight: bold; }
+.rule-badge { display: inline-block; background: var(--text-primary); color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-right: 4px; vertical-align: baseline; }
