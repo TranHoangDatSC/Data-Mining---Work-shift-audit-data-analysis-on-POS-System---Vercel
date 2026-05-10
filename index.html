@@ -677,70 +677,113 @@
   <div class="kpi-row" id="kpis-phase-1"></div>
   <div class="report-content">
 
+    <!-- ── Mục 1: Histogram KDE ───────────────────────────────────── -->
     <div class="report-section">
       <h3 class="section-title">1. Phân phối Lệch Két &amp; Đối soát Hóa đơn</h3>
       <div class="insight-block">
         <div class="insight-text">
-          <p><strong>Mục đích:</strong> Đánh giá mức độ sai lệch tài chính của các ca làm việc thông qua phương pháp Ước lượng mật độ hạt nhân (Kernel Density Estimate - KDE).</p>
+          <p><strong>Đọc biểu đồ:</strong> Hai histogram đặt cạnh nhau. Mỗi cột = số ca rơi vào khoảng tiền đó. Đường cong đỏ = ước lượng mật độ (KDE) làm mượt phân phối.</p>
           <ul class="insight-list">
-            <li>Phần lớn các ca làm việc có xu hướng lệch dương (dư tiền trong két), đỉnh phân phối nằm lệch phải mốc 0.</li>
-            <li><span class="highlight-text">Phát hiện cốt lõi:</span> <code>Payment_Mismatch</code> bằng <strong>0 trên toàn bộ 236 ca</strong> — xác nhận không tồn tại lỗi bấm nhầm loại tiền ở cấp hóa đơn.</li>
-            <li>Sai lệch duy nhất quan sát được là <code>Cash_Diff</code> khi chốt két cuối ca.</li>
+            <li><strong>Hình trái (Cash_Diff):</strong> Toàn bộ đống cột nằm về phía <em>phải</em> mốc 0 (đường đen đứt). Trung bình = <strong>771.148đ</strong> (đường cam đứt). Đây là mức két dư điển hình mỗi ca — chủ yếu do tiền từ ca trước chưa được nộp lên, dồn lại.</li>
+            <li><strong>Hình phải (Payment_Mismatch):</strong> Chỉ có <em>một cột duy nhất</em> dựng đứng tại x = 0, đếm hơn 200 ca. Không có cột nào ở bất kỳ vị trí nào khác.</li>
+            <li><span class="highlight-text">Phát hiện cốt lõi:</span> <code>Payment_Mismatch</code> = 0 trên <strong>toàn bộ 236 ca</strong> — xác nhận không tồn tại lỗi bấm nhầm loại tiền (Tiền mặt / Chuyển khoản) trong suốt kỳ dữ liệu.</li>
           </ul>
         </div>
         <div class="chart-card insight-img">
-          <img src="static/images/phase1/histogram-kde.png" alt="Phân phối Lệch Két" onclick="openLightbox(this.src,'Histogram &amp; KDE: Phân phối Cash_Diff')">
+          <img src="static/images/phase1/histogram-kde.png" alt="Phân phối Cash_Diff và Payment_Mismatch" onclick="openLightbox(this.src,'Histogram &amp; KDE — Trái: Cash_Diff lệch phải, trung bình 771k. Phải: Payment_Mismatch = 0 tuyệt đối trên 236 ca.')">
         </div>
       </div>
     </div>
 
+    <!-- ── Mục 2: Scatter Plot ────────────────────────────────────── -->
     <div class="report-section">
       <h3 class="section-title">2. Phân loại Ca làm việc theo Chiều lệch</h3>
       <div class="insight-block reverse">
         <div class="insight-text">
-          <p><strong>Mục đích:</strong> Định vị loại rủi ro từng ca, phân biệt Ca Sáng và Ca Chiều theo mẫu lệch két.</p>
+          <p><strong>Đọc biểu đồ:</strong> Mỗi chấm = 1 ca làm việc. Trục X = Payment_Mismatch, Trục Y = Cash_Diff. Xanh lá = Ca Sáng, Cam = Ca Chiều.</p>
           <ul class="insight-list">
-            <li>Dữ liệu tập trung ở trục dọc vì <code>Payment_Mismatch</code> luôn bằng 0.</li>
-            <li>Ca Chiều phân tán rộng hơn, xuất hiện nhiều ca <strong>Dư két cực đoan</strong> — cơ sở toán học để áp dụng clustering ở Vòng 2.</li>
-            <li>Sự phân cực Ca Sáng / Ca Chiều sẽ được kiểm chứng lại qua phân bố cụm K-Means.</li>
+            <li><strong>Điều bất thường nhất:</strong> Tất cả 236 chấm nằm trên <em>một đường thẳng đứng duy nhất</em> tại x = 0. Không có chấm nào lệch sang trái hay phải — vì Payment_Mismatch = 0 với toàn bộ ca, không có ca nào bấm nhầm loại tiền.</li>
+            <li><strong>Ca Chiều (cam)</strong> leo lên cao hơn nhiều trên trục Y, có chấm vọt đến 2.000k–2.200k — két dư cực đoan.</li>
+            <li><strong>Ca Sáng (xanh)</strong> phần lớn nằm vùng 0–1.000k; có một chấm xanh tít dưới cùng (~−600k) là ca hụt tiền nặng nhất.</li>
+            <li><span class="highlight-text">Manh mối cho Vòng 2:</span> Sự phân cực Ca Sáng / Ca Chiều theo Cash_Diff là cơ sở toán học để K-Means nhận ra các cụm hành vi khác nhau.</li>
           </ul>
         </div>
         <div class="chart-card insight-img">
-          <img src="static/images/phase1/scatter-plot.png" alt="Scatter Plot" onclick="openLightbox(this.src,'Scatter Plot: Phân loại ca theo chiều lệch')">
+          <img src="static/images/phase1/scatter-plot.png" alt="Scatter Cash_Diff x Payment_Mismatch" onclick="openLightbox(this.src,'Scatter Plot — 236 chấm xếp thành 1 cột đứng tại x=0 vì Payment_Mismatch=0 tuyệt đối. Ca Chiều (cam) dư két cao hơn Ca Sáng (xanh).')">
         </div>
       </div>
     </div>
 
+    <!-- ── Mục 3: Boxplot ─────────────────────────────────────────── -->
     <div class="report-section">
-      <h3 class="section-title">3. Phân tích Tương quan (Correlation Analysis)</h3>
+      <h3 class="section-title">3. So sánh Ca Sáng và Ca Chiều (Boxplot)</h3>
       <div class="insight-block">
         <div class="insight-text">
-          <p><strong>Mục đích:</strong> Đo lường mức độ tác động lẫn nhau giữa quy mô doanh thu, số lượng hóa đơn và mức độ lệch két.</p>
+          <p><strong>Đọc biểu đồ:</strong> Ba boxplot đặt cạnh nhau. Hộp = vùng 25%–75% số ca. Đường giữa hộp = trung vị. Râu = giá trị xa nhất hợp lệ. Đường đỏ đứt = mốc 0.</p>
           <ul class="insight-list">
-            <li>Tương quan mạnh nhất: <code>total_revenue</code> ↔ <code>bill_count</code> — hoàn toàn hợp lý về nghiệp vụ.</li>
-            <li><code>Cash_Diff</code> và <code>CashDiff_Ratio</code> có tương quan r = 0.55. Đa cộng tuyến nhẹ này không ảnh hưởng đến K-Means; <code>CashDiff_Ratio</code> bắt buộc giữ lại vì phản ánh quy mô tương đối của sai lệch.</li>
+            <li><strong>Hộp 1 — Cash_Diff:</strong> Hộp Ca Chiều (cam) cao hơn và to hơn hộp Ca Sáng (xanh) — Ca Chiều dư két nhiều hơn và bất ổn hơn một cách có hệ thống.</li>
+            <li><strong>Hộp 2 — Payment_Mismatch:</strong> Cả hai ca chỉ là một đường kẻ ngang đè lên mốc 0 — không có hộp, không có râu. Lần thứ ba xác nhận Payment_Mismatch = 0 tuyệt đối.</li>
+            <li><strong>Hộp 3 — Doanh thu:</strong> Ca Sáng (xanh) có doanh thu cao hơn Ca Chiều rõ rệt (trung vị ~850k vs ~650k) — Ca Sáng đông khách hơn, nhân viên bận hơn, dễ xảy ra sai sót hơn.</li>
           </ul>
         </div>
         <div class="chart-card insight-img">
-          <img src="static/images/phase1/correlation-heatmap.png" alt="Heatmap tương quan" onclick="openLightbox(this.src,'Heatmap: Ma trận tương quan các Đặc trưng')">
+          <img src="static/images/phase1/boxplot.png" alt="Boxplot so sánh Ca Sáng và Ca Chiều" onclick="openLightbox(this.src,'Boxplot 3 chiều — Cash_Diff: Ca Chiều dư nhiều hơn. Payment_Mismatch: phẳng tuyệt đối tại 0. Doanh thu: Ca Sáng cao hơn.')">
         </div>
       </div>
     </div>
 
+    <!-- ── Mục 4: Correlation Heatmap ────────────────────────────── -->
+    <div class="report-section">
+      <h3 class="section-title">4. Phân tích Tương quan (Correlation Heatmap)</h3>
+      <div class="insight-block reverse">
+        <div class="insight-text">
+          <p><strong>Đọc biểu đồ:</strong> Bảng màu — đỏ đậm = tương quan dương mạnh (r gần 1), xanh đậm = tương quan âm mạnh (r gần −1), trắng = không liên quan. Số trong ô = hệ số Pearson r.</p>
+          <ul class="insight-list">
+            <li><code>actual_cash_in_drawer</code> ↔ <code>Cash_Diff</code> = <strong>0.91</strong> (đỏ đậm nhất): Két chứa càng nhiều tiền thực tế thì lệch két càng lớn — hợp lý, vì tiền tích lũy từ nhiều ca.</li>
+            <li><code>total_revenue</code> ↔ <code>bill_count</code> = <strong>0.90</strong>: Doanh thu cao đi kèm nhiều hóa đơn — hiển nhiên, không có gì lạ.</li>
+            <li><code>Payment_Mismatch</code> và <code>Revenue_Mismatch</code>: <strong>toàn bộ hàng và cột trống tinh</strong> — không có số nào. Đây không phải lỗi vẽ hình. Hai biến này = 0 tuyệt đối nên không có phương sai, không thể tính tương quan Pearson.</li>
+            <li><code>Cash_Diff</code> ↔ <code>total_revenue</code> = <strong>−0.27</strong> (xanh nhạt): Ca doanh thu cao thì lệch két thấp hơn một chút — gợi ý Ca Sáng đông khách nhưng chốt sổ kỹ hơn.</li>
+          </ul>
+        </div>
+        <div class="chart-card insight-img">
+          <img src="static/images/phase1/correlation-heatmap.png" alt="Ma trận tương quan kiểm toán" onclick="openLightbox(this.src,'Heatmap tương quan — Nổi bật: actual_cash↔Cash_Diff=0.91, revenue↔bill=0.90. Payment/Revenue Mismatch: cột trống vì = 0 tuyệt đối.')">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Mục 5: Timeseries ──────────────────────────────────────── -->
+    <div class="report-section">
+      <h3 class="section-title">5. Đối soát Tổng tiền &amp; Xu hướng Tỷ lệ Tiền mặt</h3>
+      <div class="insight-block">
+        <div class="insight-text">
+          <p><strong>Đọc biểu đồ:</strong> Hai hình hoàn toàn khác nhau đặt cạnh nhau.</p>
+          <ul class="insight-list">
+            <li><strong>Hình trái — 4 cột tổng tiền:</strong> Tiền mặt theo máy chốt = <strong>100,5M</strong>; Tiền mặt theo bill chi tiết = <strong>100,5M</strong>. Chuyển khoản theo máy = <strong>90,9M</strong>; theo bill = <strong>90,9M</strong>. Hai cặp cột bằng nhau <em>tuyệt đối đến từng đồng</em> — xác nhận lần thứ tư: không có ca nào bấm nhầm loại tiền trong 5 tháng vận hành.</li>
+            <li><strong>Hình phải — Xu hướng Cash_Ratio theo thời gian:</strong> Đường đỏ (rolling 7 ca) dao động trong vùng 40%–80%, không có xu hướng tăng hay giảm rõ ràng theo thời gian. Có một đỉnh nhọn ~85% vào tháng 1/2026 rồi trở về vùng bình thường.</li>
+            <li><span class="highlight-text">Kết luận:</span> Tỷ lệ tiền mặt <em>không có tính mùa vụ</em> — rủi ro không bắt nguồn từ biến động thời gian mà đến từ thói quen vận hành cố hữu của từng ca.</li>
+          </ul>
+        </div>
+        <div class="chart-card insight-img">
+          <img src="static/images/phase1/histogram-timeseries.png" alt="Tổng tiền và xu hướng Cash_Ratio" onclick="openLightbox(this.src,'Trái: 4 cột tổng tiền — máy chốt vs bill chi tiết khớp tuyệt đối (100.5M và 90.9M). Phải: Cash_Ratio rolling 7 ca — dao động 40%–80%, không có xu hướng mùa vụ.')">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Summary Box ────────────────────────────────────────────── -->
     <div class="summary-box">
       <h3 class="summary-title">💡 TỔNG KẾT VÒNG 1 &amp; CHUẨN BỊ ĐẦU VÀO</h3>
       <div class="summary-grid">
         <div class="summary-item">
           <strong>✅ Xử lý Dữ liệu:</strong>
-          <p>Ghép <code>DetailsTransaction</code> → từng ca trong <code>MainLog</code> bằng kỹ thuật cửa sổ thời gian <code>merge_asof(forward)</code>. 242 → 236 ca hợp lệ (loại 6 ca doanh thu = 0).</p>
+          <p>Ghép <code>DetailsTransaction</code> → từng ca trong <code>MainLog</code> bằng <code>merge_asof(forward)</code>. 242 → 236 ca hợp lệ (loại 6 ca doanh thu = 0).</p>
         </div>
         <div class="summary-item">
           <strong>⚙️ Feature Engineering:</strong>
           <p>6 đặc trưng kiểm toán: <code>Cash_Diff</code>, <code>Payment_Mismatch</code>, <code>Revenue_Mismatch</code>, <code>Cash_Ratio</code>, <code>CashDiff_Ratio</code>, <code>Shift_Velocity</code>.</p>
         </div>
         <div class="summary-item">
-          <strong>➡️ Chuyển tiếp:</strong>
-          <p>5 features chọn lọc đưa vào K-Means Vòng 2. 101 ghi chú có <code>notes</code> tách riêng cho Text Mining Vòng 3.</p>
+          <strong>🔍 Phát hiện EDA:</strong>
+          <p>Payment_Mismatch = 0 tuyệt đối (xác nhận 4 lần qua 4 hình khác nhau). Cash_Diff trung bình +771k — két thường dư, không hụt. Không có tính mùa vụ.</p>
         </div>
         <div class="summary-item" style="background:rgba(67,97,238,.15);border-color:#4361ee">
           <strong>📦 OUTPUT:</strong>
@@ -748,6 +791,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -766,6 +810,7 @@
   <div class="kpi-row" id="kpis-phase-2"></div>
   <div class="report-content">
 
+  <!-- ── Mục 1: Chọn k ─────────────────────────────────────────── -->
   <div class="report-section">
     <h3 class="section-title">1. Đánh giá Metrics và Chọn k=4 tối ưu</h3>
     <div class="insight-block">
@@ -774,27 +819,28 @@
 
         <ul class="insight-list">
           <li>
-            <strong>Silhouette &amp; Elbow:</strong>
-            Elbow cho thấy tốc độ giảm Inertia bắt đầu ổn định quanh k=4.
-            Silhouette Score tại k=4 (~0.27) phản ánh dữ liệu có xu hướng phân cụm ở mức trung bình, phù hợp với đặc trưng dữ liệu vận hành thực tế vốn chứa nhiều nhiễu và hành vi giao thoa.
+            <strong>Elbow Curve:</strong>
+            Inertia giảm mạnh từ k=2 đến k=4 (từ 940 xuống 524.6), sau đó tốc độ giảm chậm lại rõ rệt. Đây là dấu hiệu k=4 là điểm cân bằng tốt giữa số cụm và chất lượng gom nhóm.
           </li>
 
           <li>
-            <strong>Davies-Bouldin Index ↓:</strong>
-            DBI tại k=4 không phải nhỏ nhất tuyệt đối, tuy nhiên vẫn nằm trong vùng chấp nhận được, cho thấy các cụm duy trì mức phân tách tương đối ổn định.
+            <strong>Silhouette Score:</strong>
+            Tại k=4 = 0.271. Cần lưu ý trung thực: k=2 cho Silhouette cao nhất (0.820) và k=5 (0.293) cũng cao hơn k=4. Tuy nhiên k=2 quá thô — chỉ tách "bình thường" vs "bất thường", không phân biệt được các loại hành vi vận hành khác nhau. k=4 được chọn vì Elbow rõ ràng và 4 cụm có ý nghĩa kinh doanh.
           </li>
 
           <li>
-            <strong>Calinski-Harabasz Index ↑:</strong>
-            CH Index duy trì ở mức cao tại k=4, phản ánh sự cân bằng giữa độ gom cụm nội bộ và khoảng cách giữa các tâm cụm.
+            <strong>Davies-Bouldin Index ↓ (thấp hơn = tốt hơn):</strong>
+            Tại k=4 = 1.004 — đây là điểm cao nhất (tệ nhất) trong dải k=2..7. Nguyên nhân: ranh giới giữa C1 (Bình Thường) và C3 (Tải Cao) không tách biệt hoàn toàn về mặt hình học — phản ánh đúng thực tế dữ liệu vận hành có nhiều ca giao thoa.
+          </li>
+
+          <li>
+            <strong>Calinski-Harabasz Index ↑ (cao hơn = tốt hơn):</strong>
+            Tại k=4 = 120.6. k=3 cho giá trị cao hơn một chút (~128). k=4 duy trì ổn định và không giảm đột ngột khi tăng k — phản ánh cấu trúc cụm ổn định.
           </li>
 
           <li>
             <span class="highlight-text">Quyết định:</span>
-            k=4 được lựa chọn vì đạt sự cân bằng tốt giữa:
-            (1) tính ổn định qua nhiều metrics,
-            (2) khả năng diễn giải nghiệp vụ,
-            và (3) khả năng tách biệt các nhóm hành vi vận hành quan trọng.
+            k=4 được lựa chọn vì Elbow rõ ràng, 4 cụm có tên và hành vi nghiệp vụ phân biệt được, đồng thời được xác nhận bởi Dendrogram (Agglomerative Ward cũng cho thấy 4 nhánh tự nhiên).
           </li>
         </ul>
       </div>
@@ -802,19 +848,20 @@
       <div class="insight-img" style="display:flex;gap:12px;flex-direction:column">
         <div class="chart-card">
           <img src="static/images/phase2/metrics-clustering.png"
-              alt="Metrics Clustering"
-              onclick="openLightbox(this.src,'Bảng Metrics: Inertia, Silhouette, Davies-Bouldin, Calinski-Harabasz')">
+              alt="4 Metrics Clustering k=2..7"
+              onclick="openLightbox(this.src,'4 Metrics — Inertia: gãy tại k=4. Silhouette: k=4=0.271 (k=5 cao hơn nhẹ). Davies-Bouldin: k=4=1.004 (cao nhất = tệ nhất). Calinski-Harabasz: k=4=120.6.')">
         </div>
 
         <div class="chart-card">
           <img src="static/images/phase2/silhouette-analysis.png"
-              alt="Silhouette Analysis"
-              onclick="openLightbox(this.src,'Silhouette Analysis theo từng cụm tại k=4')">
+              alt="Silhouette Analysis tại k=4"
+              onclick="openLightbox(this.src,'Silhouette trung bình=0.271. C3 Tải Cao được phân cụm tốt nhất (max ~0.6). C0 chỉ 2 ca, gần 0. C2 có một số điểm âm — cụm không đồng nhất hoàn toàn.')">
         </div>
       </div>
     </div>
   </div>
 
+  <!-- ── Mục 2: Kiểm chứng ──────────────────────────────────────── -->
   <div class="report-section">
     <h3 class="section-title">2. Kiểm chứng chéo: DBSCAN và Agglomerative Ward</h3>
 
@@ -825,20 +872,23 @@
         <ul class="insight-list">
 
           <li>
-            <strong>Agglomerative Ward (bottom-up, deterministic):</strong>
-            Dendrogram cho thấy dữ liệu có xu hướng hình thành khoảng 4 nhánh chính.
-            ARI giữa Agglomerative và K-Means đạt 0.305, phản ánh mức đồng thuận cấu trúc ở mức vừa phải thay vì ngẫu nhiên hoàn toàn.
+            <strong>Chọn ε cho DBSCAN bằng k-Distance Graph:</strong>
+            Biểu đồ khoảng cách đến láng giềng thứ 5, sắp xếp giảm dần. Đường cong gãy mạnh ở đầu rồi thoải dần — điểm khuỷu tay (Elbow) cho thấy ε = <strong>3.116</strong> là ngưỡng phân tách hợp lý. Hầu hết 230+ ca có hàng xóm trong khoảng 3.116; chỉ vài ca đầu tiên mới cần khoảng cách xa hơn để tìm láng giềng — đây chính là outlier.
           </li>
 
           <li>
-            <strong>DBSCAN (density-based, không cần khai báo k):</strong>
-            Các điểm bị DBSCAN gán nhãn nhiễu (-1) phần lớn trùng với cụm C0 của K-Means,
-            cho thấy đây là nhóm hành vi bất thường thay vì cụm vận hành ổn định thông thường.
+            <strong>DBSCAN (ε=3.1, min_samples=5):</strong>
+            Gán nhãn nhiễu (−1) cho đúng <strong>2 điểm</strong> nằm tít ngoài không gian PCA (x ≈ 10 và x ≈ 15). Hai điểm này trùng khớp chính xác với cụm C0 của K-Means. Hai thuật toán hoàn toàn khác cơ chế đều đồng ý: 2 ca đó là bất thường thực sự.
+          </li>
+
+          <li>
+            <strong>Agglomerative Ward (bottom-up, deterministic):</strong>
+            Dendrogram cắt tại height = 14.25 tạo ra 4 nhánh — xác nhận dữ liệu tự nhiên hình thành 4 nhóm. ARI giữa Agglomerative và K-Means đạt <strong>0.305</strong>: hai thuật toán không gán nhãn y hệt nhau nhưng đồng thuận về cấu trúc phân nhóm chính.
           </li>
 
           <li>
             <span class="highlight-text">Kết luận:</span>
-            Ba thuật toán cho kết quả tương đối nhất quán, đặc biệt trong việc cô lập nhóm ca làm việc bất thường và xác nhận sự tồn tại của các mẫu vận hành khác nhau.
+            Ba thuật toán với ba cơ chế khác nhau đều xác nhận sự tồn tại của các nhóm ca làm việc có hành vi phân biệt, đặc biệt là 2 ca outlier C0 bị tất cả cùng đẩy ra ngoài.
           </li>
 
         </ul>
@@ -847,21 +897,34 @@
       <div class="insight-img" style="display:flex;gap:12px;flex-direction:column">
 
         <div class="chart-card">
+          <img src="static/images/phase2/k-distance-dbscan.png"
+              alt="k-Distance Graph chọn ε"
+              onclick="openLightbox(this.src,'k-Distance Graph (k=5) — Đường cong gãy mạnh đầu, thoải dần. Điểm Elbow → ε=3.116. Vài ca đầu tiên cần khoảng cách >3 để tìm hàng xóm = outlier.')">
+        </div>
+
+        <div class="chart-card">
           <img src="static/images/phase2/Dendrogram.png"
-              alt="Dendrogram"
-              onclick="openLightbox(this.src,'Dendrogram: Agglomerative Ward với ngưỡng cắt khoảng 4 cụm')">
+              alt="Dendrogram Ward"
+              onclick="openLightbox(this.src,'Dendrogram Agglomerative Ward — Cắt tại height=14.25 tạo ra 4 nhánh. Hai lần merge lớn nhất (15→22 và 22→28) nằm trên đường cắt — cho thấy 4 nhóm tách biệt thực sự.')">
         </div>
 
         <div class="chart-card">
           <img src="static/images/phase2/PCA2D-Kmeans-DBSCAN.png"
               alt="PCA K-Means vs DBSCAN"
-              onclick="openLightbox(this.src,'PCA 2D: So sánh cụm K-Means và nhiễu DBSCAN')">
+              onclick="openLightbox(this.src,'PCA 2D so sánh — Trái: K-Means 4 màu, 2 chấm C0 tít ngoài phải. Phải: DBSCAN đặt 2 dấu X (noise) tại đúng vị trí 2 chấm C0. Hai thuật toán đồng thuận về outlier.')">
+        </div>
+
+        <div class="chart-card">
+          <img src="static/images/phase2/PCA2D-Kmeans-Agglo.png"
+              alt="PCA K-Means vs Agglomerative"
+              onclick="openLightbox(this.src,'PCA 2D so sánh — Trái: K-Means. Phải: Agglomerative Ward. Màu sắc phân bố khác nhau ở vùng giữa (ARI=0.305) nhưng cả hai đều đẩy 2 outlier ra khỏi đám đông chính.')">
         </div>
 
       </div>
     </div>
   </div>
 
+  <!-- ── Mục 3: Hồ sơ 4 cụm ────────────────────────────────────── -->
   <div class="report-section">
     <h3 class="section-title">3. Đọc "ADN" của 4 Nhóm rủi ro (Hồ sơ Cụm)</h3>
 
@@ -873,27 +936,23 @@
         <ul class="insight-list">
 
           <li>
-            <strong>C0 — Dư két cao (Outlier-oriented):</strong>
-            CashDiff_Ratio rất lớn và được DBSCAN đánh dấu là nhiễu.
-            Nhóm này phản ánh các ca có sai lệch tiền mặt bất thường cần được kiểm tra quy trình bàn giao và chốt két.
+            <strong>C0 — Dư Két Cao (2 ca, Outlier):</strong>
+            CashDiff_Ratio = <strong>13.95</strong> — cao gấp 15× trung bình, ô xanh đậm nhất trong toàn bộ heatmap. Két dư gấp 13–22 lần doanh thu của chính ca đó. Số bill và doanh thu lại cực thấp (chuẩn hóa ~ −2). Nghịch lý này xảy ra vì tiền tích lũy từ nhiều ca trước chưa được nộp, không phải tiền kiếm được trong ca này.
           </li>
 
           <li>
-            <strong>C1 — Bình thường:</strong>
-            Các chỉ số nằm gần trung tâm phân phối dữ liệu.
-            Đây là nhóm vận hành ổn định và chiếm đa số (~87%).
+            <strong>C1 — Bình Thường (96 ca):</strong>
+            Tất cả chỉ số gần 0 trong không gian chuẩn hóa. Đây là "baseline" của hệ thống — cách vận hành điển hình, không có gì bất thường.
           </li>
 
           <li>
-            <strong>C2 — Tích lũy dị biệt:</strong>
-            Doanh thu thấp nhưng tồn quỹ cao bất thường.
-            Đây là nhóm có rủi ro vận hành đáng chú ý và cần được rà soát thủ công.
+            <strong>C2 — Tích Lũy Đặc Biệt (28 ca):</strong>
+            Số bill (1.56) và doanh thu (2.11) ở mức cao nhất trong 4 cụm — đây là các ca <em>siêu đông khách</em>. Cash_Diff không đặc biệt cao (−0.32 âm nhẹ). Tên "Tích Lũy Đặc Biệt" phản ánh đặc điểm bận rộn vận hành bất thường, không phải tích lũy tiền.
           </li>
 
           <li>
-            <strong>C3 — Tải cao:</strong>
-            Doanh thu và số lượng hóa đơn đều rất lớn.
-            Nhóm này phản ánh các ca có áp lực giao dịch cao, dễ phát sinh sai lệch tiền do cường độ thao tác lớn.
+            <strong>C3 — Tải Cao (110 ca, đông nhất):</strong>
+            Bill và doanh thu ở mức vừa phải cao, nhỏ hơn C2. Cash_Diff thấp (−0.46). Áp lực giao dịch cao khiến nhân viên dễ mắc sai sót thối tiền — đây là cụm cần giám sát do tần suất cao, dù từng ca không bất thường cực đoan.
           </li>
 
         </ul>
@@ -904,7 +963,7 @@
         <div class="chart-card">
           <img src="static/images/phase2/radar-chart.png"
               alt="Radar Chart"
-              onclick="openLightbox(this.src,'Radar Chart: Hồ sơ đặc tính của 4 tâm cụm')">
+              onclick="openLightbox(this.src,'Radar Chart (chuẩn hóa 0–1) — C0 đỏ: cánh Lệch/DT (Ratio) dài nhất. C2 cam: Số bill và Doanh thu cao nhất. C1 xanh: đa giác nhỏ đều ở giữa. C3 xanh lá: giữa C1 và C2.')">
         </div>
 
         <div style="display:flex;gap:12px">
@@ -912,13 +971,13 @@
           <div class="chart-card" style="flex:1">
             <img src="static/images/phase2/heatmap-centroids.png"
                 alt="Heatmap Centroids"
-                onclick="openLightbox(this.src,'Heatmap: Giá trị chuẩn hóa của các tâm cụm')">
+                onclick="openLightbox(this.src,'Heatmap Centroids — C0: CashDiff_Ratio=13.95 (xanh đậm nhất, cực đoan). C2: total_revenue=2.11 và bill_count=1.56 cao nhất. C1: tất cả gần 0. Payment_Mismatch toàn 0.00.')">
           </div>
 
           <div class="chart-card" style="flex:1">
             <img src="static/images/phase2/boxplot-3.png"
-                alt="Boxplot"
-                onclick="openLightbox(this.src,'Boxplot: Phân bố đặc trưng theo từng cụm')">
+                alt="Boxplot 3 chỉ số"
+                onclick="openLightbox(this.src,'Boxplot 3 chiều — Cash_Diff: C0 cao nhất (1500k–1800k). Số Bill: C2 cao nhất (30–50), C0 thấp nhất (1–2). Doanh thu: C2 cao nhất (1000k–1750k), C0 gần 0.')">
           </div>
 
         </div>
@@ -926,6 +985,7 @@
     </div>
   </div>
 
+  <!-- ── Mục 4: Bối cảnh vận hành ──────────────────────────────── -->
   <div class="report-section">
     <h3 class="section-title">4. Không gian đa chiều (PCA) &amp; Xu hướng theo Ca</h3>
 
@@ -938,27 +998,23 @@
         <ul class="insight-list">
 
           <li>
-            <strong>PCA 2D:</strong>
-            Các cụm hình thành xu hướng phân tách tương đối trong không gian PCA.
-            PC1 chủ yếu phản ánh quy mô giao dịch, trong khi PC2 liên quan mạnh đến mức độ lệch tiền.
+            <strong>PCA 2D (76.6% variance được giữ lại):</strong>
+            PC1 (57.6%) phản ánh chủ yếu quy mô giao dịch, PC2 (19%) liên quan đến lệch tiền. Hai điểm C0 nằm tít ngoài tại PC1 ≈ 13–15 — xa đến mức không thể nhầm. Centroid của C1 và C3 nằm gần nhau → lý do ranh giới hai cụm này không sắc nét theo Davies-Bouldin.
           </li>
 
           <li>
-            <span class="highlight-text">Ca Chiều:</span>
-            C0 (dư két cao) xuất hiện chủ yếu ở Ca Chiều,
-            phản ánh khác biệt trong quy trình bàn giao và quản lý tiền cuối ngày.
+            <span class="highlight-text">C0 — 100% Ca Chiều:</span>
+            Không có một ca C0 nào thuộc Ca Sáng. Ca Sáng chưa nộp tiền, Ca Chiều nhận cả két cũ lẫn mới → dư tiền cực đoan xuất hiện ở Ca Chiều.
           </li>
 
           <li>
-            <span class="highlight-text">Ca Sáng:</span>
-            C3 (tải cao) chiếm tỷ lệ lớn ở Ca Sáng,
-            cho thấy áp lực giao dịch cao có thể làm tăng nguy cơ phát sinh sai lệch tiền mặt.
+            <span class="highlight-text">C3 — 65% Ca Sáng:</span>
+            Ca Sáng đông khách hơn (doanh thu cao hơn như đã thấy ở Vòng 1), áp lực giao dịch cao, dễ thối nhầm tiền → xuất hiện nhiều ở C3.
           </li>
 
           <li>
-            <strong>Tính mùa vụ:</strong>
-            Các cụm phân bố tương đối đều theo thời gian,
-            cho thấy rủi ro vận hành có xu hướng mang tính hệ thống thay vì chỉ xuất hiện theo mùa vụ ngắn hạn.
+            <strong>Không có tính mùa vụ:</strong>
+            Scatter theo thời gian và stacked bar theo tháng đều cho thấy tỷ lệ các cụm ổn định qua 5 tháng. Rủi ro không tập trung vào giai đoạn nào — đây là đặc điểm hệ thống, không phải biến động thời vụ.
           </li>
 
         </ul>
@@ -968,20 +1024,27 @@
 
         <div class="chart-card">
           <img src="static/images/phase2/PCA2D-scatter-feature.png"
-              alt="PCA 2D"
-              onclick="openLightbox(this.src,'PCA 2D: Trực quan hóa dữ liệu sau giảm chiều')">
+              alt="PCA 2D + Cash_Diff × Velocity"
+              onclick="openLightbox(this.src,'Trái: PCA 2D với centroids (X đen). 2 chấm đỏ C0 tít xa PC1=13,15. C1 và C3 centroid gần nhau ở giữa. Phải: Cash_Diff × bill_count — C2 cam trải rộng bill 35–50+, C3 xanh vùng 20–35.')">
         </div>
 
         <div class="chart-card">
           <img src="static/images/phase2/moring-afternoon-shift.png"
-              alt="Ca Sáng Chiều"
-              onclick="openLightbox(this.src,'Phân bố rủi ro theo Ca Sáng và Ca Chiều')">
+              alt="Ca Sáng vs Ca Chiều theo cụm"
+              onclick="openLightbox(this.src,'Tỷ lệ Ca Sáng/Ca Chiều: C0=100% Ca Chiều. C1=75% Ca Chiều. C2=60% Ca Sáng. C3=65% Ca Sáng. C0 chỉ xuất hiện ở Ca Chiều vì tiền từ Ca Sáng dồn vào.')">
+        </div>
+
+        <div class="chart-card">
+          <img src="static/images/phase2/cluster-distribution-overtime.png"
+              alt="Phân bố cụm theo thời gian"
+              onclick="openLightbox(this.src,'Trên: scatter Cash_Diff theo thời gian 12/2025–05/2026, 4 màu rải đều. Dưới: stacked bar tỷ lệ cụm theo tháng — C3 chiếm 35–50% ổn định, không có tháng nào bất thường.')">
         </div>
 
       </div>
     </div>
   </div>
 
+  <!-- ── Summary ────────────────────────────────────────────────── -->
   <div class="summary-box">
     <h3 class="summary-title">💡 KẾT LUẬN VÒNG 2 &amp; ĐẦU RA SẢN PHẨM</h3>
 
@@ -989,44 +1052,25 @@
 
       <div class="summary-item">
         <strong>🌟 Feature Engineering:</strong>
-        <p>
-          Tạo <code>CashDiff_Ratio</code> và <code>Avg_Bill_Value</code>
-          giúp thuật toán đánh giá tỷ trọng sai lệch thay vì bị chi phối bởi giá trị tuyệt đối.
-        </p>
+        <p>Tạo <code>CashDiff_Ratio</code> và <code>Avg_Bill_Value</code> giúp thuật toán đánh giá tỷ trọng sai lệch thay vì bị chi phối bởi giá trị tuyệt đối. Đặc biệt, CashDiff_Ratio là feature quyết định nhận diện C0 (giá trị 13.95 so với trung bình ~0.5–1).</p>
       </div>
 
       <div class="summary-item">
-        <strong>✅ 3 thuật toán × nhiều metrics:</strong>
-        <p>
-          K-Means được sử dụng làm mô hình chính,
-          kết hợp với DBSCAN để phát hiện outlier và Agglomerative Ward để kiểm chứng cấu trúc phân cấp.
-          Các kết quả cho thấy dữ liệu tồn tại nhiều nhóm hành vi vận hành có ý nghĩa thực tiễn.
-        </p>
+        <strong>✅ 3 thuật toán × 4 metrics:</strong>
+        <p>K-Means (k=4) làm mô hình chính. DBSCAN xác nhận chính xác 2 outlier C0. Agglomerative Ward (ARI=0.305) xác nhận cấu trúc 4 nhánh tự nhiên. Không có metric nào đứng một mình "chứng minh" k=4 — quyết định dựa trên Elbow rõ và ý nghĩa nghiệp vụ.</p>
       </div>
 
       <div class="summary-item">
         <strong>📋 Phát hiện vận hành:</strong>
-        <p>
-          Sai lệch tiền mặt có xu hướng liên quan đến khác biệt tải giao dịch,
-          quy trình bàn giao cuối ca và các ca có đặc điểm vận hành bất thường.
-        </p>
+        <p>C0 (dư két) = 100% Ca Chiều do Ca Sáng chưa nộp tiền. C3 (tải cao) = 65% Ca Sáng do đông khách hơn. C2 (siêu bận) là các ca có doanh thu lớn nhất, không phải ca dư tiền nhiều nhất.</p>
       </div>
 
       <div class="summary-item" style="background:rgba(46,196,182,.15);border-color:#2ec4b6">
         <strong>📦 OUTPUT:</strong>
-        <p>
-          <code>Clustered_Shifts.csv</code> — 236 ca làm việc được gán nhãn C0–C3,
-          làm đầu vào cho Rule Engine và các bước phân tích rủi ro tiếp theo.
-        </p>
+        <p><code>Clustered_Shifts.csv</code> — 236 ca làm việc được gán nhãn C0–C3, làm đầu vào cho Rule Engine và các bước phân tích rủi ro tiếp theo.</p>
       </div>
 
     </div>
-
-    <p style="margin-top:12px;opacity:.9">
-      Mặc dù mức độ phân tách hình học giữa các cụm chưa thật sự mạnh theo Silhouette Score,
-      cấu trúc 4 cụm vẫn cho thấy giá trị thực tiễn trong việc nhận diện các mẫu vận hành bất thường
-      và hỗ trợ kiểm soát rủi ro quầy thu ngân.
-    </p>
   </div>
   </div>
 </section>
