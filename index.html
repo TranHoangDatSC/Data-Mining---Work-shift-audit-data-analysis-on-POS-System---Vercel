@@ -672,7 +672,7 @@
       <span class="phase-crisp-label">CRISP-DM: Hiểu Dữ Liệu (Data Understanding) + Chuẩn Bị Dữ Liệu (Data Preparation)</span>
     </div>
     <h2 class="phase-title">Phân tích Mô tả (Descriptive Analysis)</h2>
-    <p class="phase-desc">Khám phá và làm sạch dữ liệu từ Nhật ký chính (MainLog) và Chi tiết giao dịch (DetailsTransaction). Áp dụng kỹ thuật nối dữ liệu theo khung thời gian (Window-based merge) bằng hàm <code>merge_asof(direction='forward')</code>, xây dựng thành công 6 đặc trưng kiểm toán hoàn chỉnh.</p>
+    <p class="phase-desc">Khám phá và làm sạch dữ liệu từ Nhật ký chính (MainLog) và Chi tiết giao dịch (DetailsTransaction). Áp dụng kỹ thuật nối dữ liệu theo khung thời gian (Window-based merge) bằng hàm <code>merge_asof(direction='forward')</code>, xây dựng thành công 6 đặc trưng kiểm toán hoàn chỉnh. <strong>Input:</strong> <code>MaiLog.csv</code>, <code>DetailsTransaction.csv</code>.</p>
   </div>
   <div class="kpi-row" id="kpis-phase-1"></div>
   <div class="report-content">
@@ -805,7 +805,7 @@
       <span class="phase-crisp-label">CRISP-DM: Mô hình hóa (Modeling) + Đánh giá (Evaluation)</span>
     </div>
     <h2 class="phase-title">Chẩn đoán Rủi ro (Diagnostic — K-Means, DBSCAN &amp; Agglomerative)</h2>
-    <p class="phase-desc">Sử dụng kết hợp 3 thuật toán học máy không giám sát để phân cụm các ca làm việc. K-Means đóng vai trò chủ đạo nhờ khả năng tối ưu tâm cụm, trong khi DBSCAN và Agglomerative Ward được dùng để kiểm chứng cấu trúc và cô lập nhiễu (outliers). Toàn bộ dữ liệu được chuẩn hóa bằng <code>RobustScaler</code> để chống nhiễu từ các ca lệch tiền khổng lồ.</p>
+    <p class="phase-desc">Sử dụng kết hợp 3 thuật toán học máy không giám sát để phân cụm các ca làm việc. K-Means đóng vai trò chủ đạo nhờ khả năng tối ưu tâm cụm, trong khi DBSCAN và Agglomerative Ward được dùng để kiểm chứng cấu trúc và cô lập nhiễu (outliers). Toàn bộ dữ liệu được chuẩn hóa bằng <code>RobustScaler</code> để chống nhiễu từ các ca lệch tiền khổng lồ. <strong>Input:</strong> <code>Audit_Merged_Data.csv</code>, <code>Clustered_Shifts.csv</code>.</p>
   </div>
   <div class="kpi-row" id="kpis-phase-2"></div>
   <div class="report-content">
@@ -1085,7 +1085,7 @@
       <span class="phase-crisp-label">CRISP-DM: Chuẩn bị Dữ liệu (Data Prep) + Mô hình hóa (Modeling) — Nhánh Độc Lập</span>
     </div>
     <h2 class="phase-title">Khai phá Hành vi Khách hàng (Customer Pattern Mining)</h2>
-    <p class="phase-desc">Vòng 3 "đọc" cột Ghi chú (<code>notes</code>) do nhân viên gõ tay. Hệ thống tự động làm sạch lỗi chính tả, nhận diện khách quen, và dùng IQR để "bắt quả tang" những lần mua hàng bất thường về giá trị hoặc phương thức thanh toán.</p>
+    <p class="phase-desc">Vòng 3 "đọc" cột Ghi chú (<code>notes</code>) do nhân viên gõ tay. Hệ thống tự động làm sạch lỗi chính tả, nhận diện khách quen, và dùng IQR để "bắt quả tang" những lần mua hàng bất thường về giá trị hoặc phương thức thanh toán. <strong>Input:</strong> <code>DetailsTransaction.csv</code></p>
   </div>
   <div class="kpi-row" id="kpis-phase-3"></div>
   <div class="report-content">
@@ -1146,7 +1146,7 @@
       <span class="phase-crisp-label">CRISP-DM: Đánh giá (Evaluation) + Triển khai (Deployment)</span>
     </div>
     <h2 class="phase-title">Hành động Đề xuất (Prescriptive — Rule Engine)</h2>
-    <p class="phase-desc">Tích hợp toàn bộ kết quả từ 3 vòng trước để xây dựng Hệ chuyên gia (Expert System) tự động. 3 quy tắc logic kiểm toán phân loại nguyên nhân sai lệch, đánh giá mức độ nghiêm trọng và sinh báo cáo cảnh báo bằng tiếng Việt — không dùng LLM.</p>
+    <p class="phase-desc">Tích hợp toàn bộ kết quả từ 3 vòng trước để xây dựng Hệ chuyên gia (Expert System) tự động. 3 quy tắc logic kiểm toán phân loại nguyên nhân sai lệch, đánh giá mức độ nghiêm trọng và sinh báo cáo cảnh báo bằng tiếng Việt — không dùng LLM. <strong>Input:</strong> <code>Audit_Merged_Data.csv</code>, <code>Clustered_Shifts.csv</code>, <code>Customer_Pattern.csv</code>.</p>
   </div>
   <div class="kpi-row" id="kpis-phase-4"></div>
   <div class="report-content">
