@@ -1180,7 +1180,7 @@
       <span class="phase-crisp-label">CRISP-DM: Đánh giá (Evaluation) + Triển khai (Deployment)</span>
     </div>
     <h2 class="phase-title">Hành động Đề xuất (Prescriptive — Rule Engine)</h2>
-    <p class="phase-desc">Tích hợp toàn bộ kết quả từ 3 vòng trước để xây dựng Hệ chuyên gia (Expert System) tự động. 3 quy tắc logic kiểm toán phân loại nguyên nhân sai lệch, đánh giá mức độ nghiêm trọng và sinh báo cáo cảnh báo bằng tiếng Việt — không dùng LLM. <strong>Input:</strong> <code>Audit_Merged_Data.csv</code>, <code>Clustered_Shifts.csv</code>, <code>Customer_Pattern.csv</code>.</p>
+    <p class="phase-desc">Tích hợp toàn bộ kết quả từ 3 vòng trước để xây dựng Hệ chuyên gia (Expert System) tự động. 3 quy tắc logic kiểm toán phân loại nguyên nhân sai lệch, đánh giá mức độ nghiêm trọng và sinh báo cáo cảnh báo bằng tiếng Việt — không dùng LLM. <strong>Input:</strong> <code>Audit_Merged_Data.csv</code>, <code>Clustered_Shifts.csv</code>, <code>Customer_Pattern.csv</code>. <strong>Output:</strong> <code>POS_Master.csv</code> (Master Data khép kín toàn bộ Pipeline).</p>
   </div>
   <div class="kpi-row" id="kpis-phase-4"></div>
   <div class="report-content">
@@ -1203,26 +1203,24 @@
     </div>
 
     <div class="report-section">
-      <h3 class="section-title">2. Phân loại Mức độ Nghiêm trọng &amp; Báo cáo Tự động</h3>
-      <div class="insight-block reverse">
+      <h3 class="section-title">3. Khép kín vòng đời CRISP-DM (Export Master Data)</h3>
+      <div class="insight-block">
         <div class="insight-text">
-          <p><strong>Mục đích:</strong> Không phải lỗi nào cũng cần giám đốc ra mặt. Hệ thống phân tầng để người quản lý biết ưu tiên xử lý.</p>
+          <p><strong>Mục đích:</strong> Chuẩn bị Data Warehouse vững chắc cho các vòng lặp khai phá dữ liệu tiếp theo, tránh việc phải xử lý lại luồng dữ liệu từ đầu.</p>
           <ul class="insight-list">
-            <li><strong>CAO (Đỏ):</strong> R2 + bất thường thanh toán từ Vòng 3 → khả năng gian lận cực cao (cross-phase signal).</li>
-            <li><strong>TRUNG BÌNH (Cam):</strong> R2 + cụm C3 (tải cao) → đề xuất bổ sung nhân sự, không phạt nhân viên.</li>
-            <li><strong>CHÚ Ý (Xanh):</strong> R3 (dư két) → nhắc nhở quy trình bàn giao.</li>
-            <li><span class="highlight-text">Tính năng nổi bật:</span> Report Generator tự động viết câu tiếng Việt như trợ lý kế toán — hoàn toàn bằng f-string, không LLM.</li>
+            <li><strong>Cấu trúc dữ liệu "Sạch tuyệt đối":</strong> Ép kiểu toàn bộ số liệu tài chính về số nguyên (int64), triệt tiêu hoàn toàn số thực (0 float) để ngăn chặn rác dữ liệu ở các hàm tính toán sau này.</li>
+            <li><strong>Categorical Engineering:</strong> Các chỉ số tỷ lệ phức tạp (như tỷ lệ lệch két, tốc độ ca) được tự động phân nhóm (binning) thành 7 cột trạng thái phân loại dễ hiểu (VD: <em>"Ca siêu bận"</em>, <em>"Dư két bất thường"</em>).</li>
+            <li><span class="highlight-text">Tính kế thừa:</span> Master data đóng vai trò là "Single Source of Truth", chứa toàn bộ kết quả phân cụm K-Means, thói quen khách hàng và nhãn rủi ro Rule Engine, sẵn sàng feed trực tiếp vào các mô hình Machine Learning bậc cao hơn.</li>
           </ul>
         </div>
         <div class="insight-img charts-placeholder">
-          <div style="text-align:left;background:#1a1a2e;color:#fff;padding:16px;border-radius:8px;font-family:monospace;font-size:.8rem;line-height:1.5">
-            <span style="color:#f4845f">[HỆ THỐNG PHÁT CẢNH BÁO]</span><br>
-            <span style="color:#4361ee">Thời gian:</span> 4/18/2026 12:05:56 (Ca Sáng)<br>
-            <span style="color:#2ec4b6">Luật vi phạm:</span> R2_That_Thoat_Thu_Ngan<br>
-            <span style="color:#e8eaf2">---------------------------------</span><br>
-            <span style="color:#ff4757">Mức độ rủi ro:</span> TRUNG BÌNH<br>
-            <span style="color:#8888aa">Lý do:</span> Lệch két âm (-287k), Đối soát hóa đơn khớp. Cụm C3 (Tải cao).<br>
-            <span style="color:#4361ee">Khuyến nghị:</span> Rà soát camera. Cân nhắc bổ sung nhân sự giờ cao điểm.
+          <div style="text-align:left;background:#1a1a2e;color:#fff;padding:16px;border-radius:8px;font-family:monospace;font-size:.85rem;line-height:1.6;box-shadow:inset 0 0 10px rgba(0,0,0,0.5);">
+            <span style="color:#2ec4b6">✔ SUCCESS: POS_Master.csv generated.</span><br>
+            <span style="color:#8888aa">- Shape: 236 rows × 36 columns</span><br>
+            <span style="color:#8888aa">- Missing values: 0</span><br>
+            <span style="color:#8888aa">- Float types: 0 (Strict INT/CAT enforced)</span><br>
+            <span style="color:#4361ee">CRISP-DM Cycle: COMPLETE.</span><br>
+            <span style="color:#f4845f">Dataset ready for next iteration.</span>
           </div>
         </div>
       </div>
@@ -1234,7 +1232,10 @@
         <div class="summary-item"><strong>🎯 Business Value:</strong><p>Chuyển bài toán "lệch tiền liên tục" thành quy trình giám sát tự động. Giám đốc không cần dò từng hóa đơn nữa.</p></div>
         <div class="summary-item"><strong>🧠 Hybrid System:</strong><p>ML (K-Means) khám phá pattern ẩn → Rule Engine thực thi quyết định minh bạch. Hai tầng bổ sung nhau hoàn hảo.</p></div>
         <div class="summary-item"><strong>🚀 Deployment:</strong><p>Đủ nhẹ để tích hợp API ngược lại vào POS Apps Script gốc. Không phụ thuộc dịch vụ cloud hay LLM.</p></div>
-        <div class="summary-item" style="background:rgba(46,196,182,.15);border-color:#2ec4b6"><strong>📦 SẢN PHẨM CUỐI:</strong><p><code>Rule_Engine_Report.csv</code> — Nhóm rủi ro, Mức độ ưu tiên, Khuyến nghị hành động, Đoạn văn giải thích tự động.</p></div>
+        <div class="summary-item" style="background:rgba(46,196,182,.15);border-color:#2ec4b6">
+          <strong>📦 SẢN PHẨM CUỐI:</strong>
+          <p><code>POS_Master.csv</code> — Bảng Master hoàn chỉnh hợp nhất toàn bộ pipeline 4 vòng. Chứa 36 cột đã chuẩn hóa chuyên sâu (categorical/int), đóng vai trò là nền tảng Data Warehouse cho vòng đời CRISP-DM kế tiếp.</p>
+        </div>
       </div>
     </div>
   </div>
