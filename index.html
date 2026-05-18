@@ -218,7 +218,7 @@
       </div>
     </div>
   </div>
-
+  
   <!-- ── 2. MOTIVATION & DATASET ──────────────────────────────────────── -->
   <div class="academic-section">
     <span class="section-label">02 — Motivation &amp; Dataset</span>
@@ -307,85 +307,84 @@
     </table>
   </div>
 
-  <!-- ── 3. RELATED WORK ───────────────────────────────────────────────── -->
+  <!-- ── 3. RELATED WORK ──────────────────────────────────────── -->
   <div class="academic-section">
     <span class="section-label">03 — Related Work</span>
     <h3 class="academic-title">Các Nghiên cứu Liên quan</h3>
     <p class="academic-lead">
       Nhóm định vị dự án trong bối cảnh 3 hướng nghiên cứu chính: phát hiện gian lận tài chính, phân tích hành vi POS, và khai thác văn bản phi cấu trúc. Mỗi hướng có khoảng trống mà dự án này lấp đầy.
     </p>
-
     <div class="related-grid">
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#eef0fd">💳</div>
           <div>
             <p class="related-ref">Fraud Detection — Supervised</p>
-            <p class="related-title">Credit Card Fraud Detection với Logistic Regression &amp; Random Forest</p>
+            <p class="related-title">Phát hiện gian lận tài chính với Machine Learning</p>
           </div>
         </div>
-        <p class="related-desc">Hướng nghiên cứu phổ biến nhất (Pozzolo et al., 2015; Kaggle ULB dataset). Dùng nhãn binary <em>fraud / normal</em> để train classifier. Đạt precision cao nhưng phụ thuộc hoàn toàn vào nhãn đã đánh sẵn.</p>
+        <p class="related-desc">Hướng nghiên cứu phổ biến nhất <strong>(Wang Yundong, 2023; Yusuf Sahin, 2011; Lopez-Rojas, 2016)</strong>. Dùng nhãn binary <em>fraud / normal</em> để train các mô hình như Logistic Regression, Random Forest hay ANN. Đạt độ chính xác cao nhưng phụ thuộc hoàn toàn vào nhãn đã đánh sẵn.</p>
         <span class="related-diff">✦ Khác biệt: Dataset của nhóm không có nhãn → không thể áp dụng supervised approach</span>
       </div>
-
+      
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#fff0ea">🏪</div>
           <div>
             <p class="related-ref">Retail Analytics — Clustering</p>
-            <p class="related-title">Customer Segmentation bằng K-Means trên dữ liệu RFM (Recency, Frequency, Monetary)</p>
+            <p class="related-title">Phân tích phân khúc với K-Means</p>
           </div>
         </div>
-        <p class="related-desc">Hướng phân cụm khách hàng là benchmark học thuật phổ biến. Tuy nhiên các nghiên cứu này phân cụm <em>khách hàng</em>, không phân cụm <em>ca làm việc</em>, và không có chiều dữ liệu tiền mặt vật lý.</p>
-        <span class="related-diff">✦ Khác biệt: Nhóm phân cụm ca làm việc theo mẫu sai lệch tài chính — chưa có nghiên cứu tương tự công khai</span>
+        <p class="related-desc">Ứng dụng K-Means vào dữ liệu bán lẻ trực tuyến <strong>(Ardo Kusdaryanto, 2026)</strong> là benchmark học thuật phổ biến. Tuy nhiên các nghiên cứu này thường phân cụm <em>khách hàng</em>, không phân cụm <em>ca làm việc</em>, và không có chiều dữ liệu tiền mặt vật lý.</p>
+        <span class="related-diff">✦ Khác biệt: Nhóm phân cụm ca làm việc theo mẫu sai lệch tài chính thực tế</span>
       </div>
-
+      
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#f2eef9">📝</div>
           <div>
             <p class="related-ref">NLP — Text Mining cho POS</p>
-            <p class="related-title">PhoBERT &amp; các mô hình ngôn ngữ lớn cho phân tích văn bản tiếng Việt</p>
+            <p class="related-title">Xử lý ngôn ngữ tự nhiên tiếng Việt</p>
           </div>
         </div>
-        <p class="related-desc">Các mô hình như PhoBERT (Nguyen &amp; Nguyen, 2020) rất mạnh cho NLP tiếng Việt chuẩn. Tuy nhiên chúng yêu cầu văn bản đúng ngữ pháp và tối thiểu vài nghìn samples để fine-tune hiệu quả.</p>
-        <span class="related-diff">✦ Khác biệt: 101 ghi chú viết tắt chat ("n9oc pt") nằm ngoài vocabulary PhoBERT — Fuzzy Grouping + rule-based phù hợp hơn</span>
+        <p class="related-desc">Các mô hình ngôn ngữ lớn rất mạnh cho văn bản chuẩn. Tuy nhiên chúng yêu cầu văn bản đúng ngữ pháp và lượng dữ liệu lớn để fine-tune hiệu quả.</p>
+        <span class="related-diff">✦ Khác biệt: 101 ghi chú viết tắt chat nằm ngoài từ điển AI → Xử lý bằng Fuzzy Grouping + Rules hiệu quả hơn</span>
       </div>
-
+      
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#e8f9f7">🔍</div>
           <div>
             <p class="related-ref">Anomaly Detection — Unsupervised</p>
-            <p class="related-title">DBSCAN &amp; Isolation Forest cho phát hiện điểm dị biệt không có nhãn</p>
+            <p class="related-title">DBSCAN cho điểm dị biệt không nhãn</p>
           </div>
         </div>
-        <p class="related-desc">Ester et al. (1996) — DBSCAN là thuật toán nền tảng cho density-based outlier detection. Được sử dụng trong dự án này để kiểm chứng chéo kết quả K-Means và cô lập outlier cluster C0.</p>
-        <span class="related-diff">✦ Ứng dụng: Điểm DBSCAN đánh nhãn noise (-1) trùng khớp với cụm C0 của K-Means — xác nhận tính robust</span>
+        <p class="related-desc">Thuật toán nền tảng cho density-based outlier detection <strong>(Martin Ester, 1996)</strong>. Được sử dụng trong dự án này để kiểm chứng chéo kết quả K-Means và cô lập cụm nhiễu.</p>
+        <span class="related-diff">✦ Ứng dụng: Điểm DBSCAN đánh nhãn noise (-1) trùng khớp với cụm outlier C0 của K-Means</span>
       </div>
-
+      
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#fff3cd">📊</div>
           <div>
             <p class="related-ref">Expert Systems — Rule-based</p>
-            <p class="related-title">Hệ chuyên gia kiểm toán tài chính trong kế toán nội bộ</p>
+            <p class="related-title">Hệ chuyên gia kiểm toán tài chính</p>
           </div>
         </div>
-        <p class="related-desc">Rule-based expert systems có lịch sử lâu dài trong kiểm toán (Waterman, 1986). Ưu điểm: minh bạch, có thể giải thích, không phụ thuộc dữ liệu huấn luyện. Nhược điểm: cần domain expert thiết kế rule thủ công.</p>
-        <span class="related-diff">✦ Đóng góp: Nhóm kết hợp ML clustering (để khám phá pattern) + Rule Engine (để thực thi minh bạch) — hybrid approach</span>
+        <p class="related-desc">Ưu điểm của Rule Engine là sự minh bạch, có thể giải thích, không phụ thuộc dữ liệu huấn luyện. Nhược điểm: cần chuyên gia thiết kế rule thủ công.</p>
+        <span class="related-diff">✦ Đóng góp: Nhóm kết hợp ML clustering (khám phá) + Rule Engine (thực thi) — Hybrid approach</span>
       </div>
-
+      
       <div class="related-card">
         <div class="related-card-header">
           <div class="related-icon" style="background:#e8f9f7">🌳</div>
           <div>
             <p class="related-ref">Hierarchical Clustering</p>
-            <p class="related-title">Agglomerative Ward Linkage cho phân tích cấu trúc dữ liệu không có nhãn</p>
+            <p class="related-title">Agglomerative Ward Linkage</p>
           </div>
         </div>
-        <p class="related-desc">Ward (1963) — phương pháp phân cấp tối thiểu hóa phương sai nội cụm. Deterministic (không random initialization), cho phép kiểm chứng kết quả K-Means bằng dendrogram trực quan.</p>
-        <span class="related-diff">✦ Ứng dụng: ARI = 0.305 giữa K-Means và Ward — cấu trúc 4 cụm được xác nhận không phụ thuộc khởi tạo ngẫu nhiên</span>
+        <p class="related-desc">Phương pháp phân cấp tối thiểu hóa phương sai nội cụm <strong>(Joe H. Ward, 1963)</strong>. Deterministic, cho phép kiểm chứng kết quả bằng dendrogram trực quan.</p>
+        <span class="related-diff">✦ Ứng dụng: Cấu trúc 4 cụm được xác nhận đồng thuận với ARI = 0.305</span>
       </div>
     </div>
   </div>
